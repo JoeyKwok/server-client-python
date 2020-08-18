@@ -43,6 +43,7 @@ def main():
     with server.auth.sign_in(tableau_auth):
         views = filter(lambda x: x.id == args.resource_id,
                        TSC.Pager(server.views.get))
+        views = list(views)
         view = views.pop()
 
         # We have a number of different types and functions for each different export type.
@@ -63,7 +64,7 @@ def main():
             filename = 'out.{}'.format(extension)
 
         populate(view, options)
-        with file(filename, 'wb') as f:
+        with open(filename, 'wb') as f:
             if member_name == 'csv':
                 f.writelines(getattr(view, member_name))
             else:
